@@ -5,6 +5,10 @@ class SharesController < ApplicationController
     @share.save
   end
 
+  def show
+    @share = Share.find_by key: params[:id]
+  end
+
   private
 
     def app_params

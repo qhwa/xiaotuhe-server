@@ -5,6 +5,10 @@ class Share < ActiveRecord::Base
   validates_presence_of :file, :key
   before_validation :gen_key
 
+  def to_param
+    key
+  end
+
   private
 
     def gen_key

@@ -1,2 +1,2 @@
 json.success @share.persisted?
-json.data @share.file_url
+json.partial! 'shares/share', share: @share
