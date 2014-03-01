@@ -55,10 +55,12 @@ task :deploy => :environment do
 end
 
 task :start => :environment do
+  queue "cd #{deploy_to}/current"
   queue "unicorn_rails --daemonize --env #{rails_env} --config-file #{unicorn_config}"
 end
 
 task :stop => :environment do
+  queue "cd #{deploy_to}/current"
   queue "kill -QUIT `cat #{unicorn_pid}`"
 end
 
