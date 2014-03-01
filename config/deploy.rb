@@ -21,7 +21,7 @@ set :unicorn_pid,     "#{deploy_to}/tmp/pids/unicorn.pid"
 set :shared_paths, ['config/database.yml', 'log', 'config/unicorn.rb', 'config/initializers/secret_token.rb']
 
 task :environment do
-  invoke :'rvm:use[ruby-2.1.1-p247@default]'
+  invoke :'rvm:use[ruby-2.1.1@default]'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
