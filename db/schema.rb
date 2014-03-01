@@ -11,18 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140224092327) do
+ActiveRecord::Schema.define(version: 20140301082133) do
 
   create_table "shares", force: true do |t|
     t.string   "file"
-    t.string   "file_file_name"
-    t.integer  "file_file_size"
+    t.string   "content_type"
+    t.integer  "file_size"
     t.string   "key"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "original_name"
   end
 
-  add_index "shares", ["file_file_name"], name: "index_shares_on_file_file_name"
+  add_index "shares", ["content_type"], name: "index_shares_on_content_type"
   add_index "shares", ["key"], name: "index_shares_on_key"
 
 end

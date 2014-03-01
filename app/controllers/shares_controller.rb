@@ -2,7 +2,11 @@ class SharesController < ApplicationController
 
   def create
     @share = Share.new app_params
-    @share.save
+    if @share.save
+      @share.unzip if params[:options] && params[:options]['unzip'] == "true"
+    else
+      render_failure_json msg: @share.errors
+    end
   end
 
   def show
@@ -12,7 +16,7 @@ class SharesController < ApplicationController
   private
 
     def app_params
-      params.permit(:file)     
+      params.permit(:file, :name)
     end
 
 end

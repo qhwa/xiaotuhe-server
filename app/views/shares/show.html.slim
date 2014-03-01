@@ -1,1 +1,23 @@
-= @share.file.url
+.ui.segment
+  h4.ui.ribbon.green.label= @share.original_name
+  span.info
+    i.time.icon
+    = @share.updated_at.to_s(:long)
+
+  - if @share.image?
+    p
+      img.ui.huge.image src=@share.file.url
+
+  - elsif @share.unzipped?
+    p
+      i.folder.icon.blue.huge
+      = @share.original_name
+
+  .ui.buttons
+    =link_to @share.file.url, class: 'ui labeled icon button' do 
+      i.download.icon
+      | 下载 (#{number_to_human_size @share.file_size})
+
+    - if @share.unzipped?
+      =link_to unzipped_path( @share ), class: 'ui button' do
+        | 查看

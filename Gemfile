@@ -46,3 +46,6 @@ end
 
 gem 'carrierwave'
 gem 'slim'
+gem 'rubyzip'
+gem 'string_utf8'
+gem 'semantic-ui-sass', '~> 0.13.1.0'
