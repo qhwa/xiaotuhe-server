@@ -56,6 +56,7 @@ class Share < ActiveRecord::Base
     full_path = File.join( extract_target_dir, path )
     mkdir_p File.dirname( full_path )
     mv file.path, full_path
+    chmod "a+r", full_path
   end
 
   private
