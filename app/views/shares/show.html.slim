@@ -9,8 +9,14 @@
 
   - elsif @share.unzipped?
     p
-      i.folder.icon.blue.huge
+      i.blue.huge.folder.icon
       = @share.original_name
+
+  - else
+    p
+      i.black.huge.file.icon
+      = @share.original_name
+
 
   .ui.buttons
     - if @share.file.file

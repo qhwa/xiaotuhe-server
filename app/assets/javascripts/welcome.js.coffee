@@ -10,42 +10,6 @@ jQuery ($) ->
     autoProcessQueue:   false
     maxFiles:           5000
 
-    init: ->
-
-      @on "complete", (file) ->
-        if file.status != "success"
-          @failures.push file
-
-        if @allSuccessful()
-          @onSuccess()
-        
-        @processQueue()
-
-      @on "success", (file) ->
-        if @singleFile
-          @key = JSON.parse( file.xhr.response ).id
-
-      @on "dragover", () ->
-        $(dom).addClass 'inverted'
-
-      @on "dragleave", () ->
-        $(dom).removeClass 'inverted'
-
-      @on "totaluploadprogress", (per) ->
-        console.log per
-        $('.bar', progressBar).css width: "#{per}%"
-
-      @on "sending", (file, xhr, formData) ->
-        console.log xhr
-        formData.append "path", file.fullPath
-
-      @on "drop", (evt) ->
-        $(dom)
-          .removeClass( 'inverted' )
-          .addClass( 'working' )
-
-        $('.dz-message', dom).hide()
-        @processDrop( evt.dataTransfer.items )
   }
 
   myDropzone = new Dropzone( dom, options )
@@ -88,7 +52,6 @@ jQuery ($) ->
       .fail () ->
         console.log 'Fail creating share!'
 
-
     onSuccess: ()->
       progressBar.addClass('successful')
       msg = $('#success-message')
@@ -112,3 +75,36 @@ jQuery ($) ->
       _.isEmpty( @getUploadingFiles() ) &&
       _.isEmpty( @failures )
 
+  (()->
+
+    @on "complete", (file) ->
+      @failures.push( file ) unless file.status == "success"
+      @processQueue()
+
+    @on "success", (file) ->
+      if @singleFile
+        @key = JSON.parse( file.xhr.response ).id
+
+      @onSuccess() if @allSuccessful()
+
+    @on "dragover", () ->
+      $(dom).addClass 'inverted'
+
+    @on "dragleave", () ->
+      $(dom).removeClass 'inverted'
+
+    @on "totaluploadprogress", (per) ->
+      $('.bar', progressBar).css width: "#{per}%"
+
+    @on "sending", (file, xhr, formData) ->
+      formData.append "path", file.fullPath
+
+    @on "drop", (evt) ->
+      $(dom)
+        .removeClass( 'inverted' )
+        .addClass( 'working' )
+
+      $('.dz-message', dom).hide()
+      @processDrop( evt.dataTransfer.items )
+
+    ).call myDropzone
