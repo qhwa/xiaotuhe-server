@@ -1,6 +1,5 @@
 .ui.segment
-  h4.ui.ribbon.green.label= @share.original_name
-  span.info
+  h4.ui.ribbon.green.label
     i.time.icon
     = @share.updated_at.to_s(:long)
 
@@ -14,9 +13,10 @@
       = @share.original_name
 
   .ui.buttons
-    =link_to @share.file.url, class: 'ui labeled icon button' do 
-      i.download.icon
-      | 下载 (#{number_to_human_size @share.file_size})
+    - if @share.file.file
+      =link_to @share.file.url, class: 'ui labeled icon button' do 
+        i.download.icon
+        | 下载 (#{number_to_human_size @share.file_size})
 
     - if @share.unzipped?
       =link_to unzipped_path( @share ), class: 'ui button' do
