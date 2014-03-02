@@ -5,7 +5,7 @@ class SharesController < ApplicationController
   def create
     @share = Share.new app_params
     if @share.save
-      @share.unzip if params[:options] && params[:options]['unzip'] == "true"
+      @share.unzip
     else
       render_failure_json msg: @share.errors
     end

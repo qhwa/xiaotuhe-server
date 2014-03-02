@@ -31,7 +31,6 @@ class Share < ActiveRecord::Base
       rescue => e
         logger.fatal "Error on extracting id asset #{self.id}"
         logger.fatal e.inspect
-        raise
       end
     end
   end
