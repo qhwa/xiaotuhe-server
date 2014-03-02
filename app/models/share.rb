@@ -55,8 +55,8 @@ class Share < ActiveRecord::Base
     raise "invalid path" if path =~ %r{\.\./}
     full_path = File.join( extract_target_dir, path )
     mkdir_p File.dirname( full_path )
-    mv file.path, full_path
-    chmod "a+r", full_path
+    cp file.path, full_path
+    chmod 0644, full_path
   end
 
   private
