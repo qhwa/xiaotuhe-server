@@ -36,7 +36,7 @@ class Share < ActiveRecord::Base
   end
 
   def can_unzip?
-    !unzipped? and file.file.file =~ /\.zip$/
+    !unzipped? and file.try(:file) && file.file.file =~ /\.zip$/
   end
 
   def unzipped?
