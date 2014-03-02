@@ -15,4 +15,3 @@
 //= require jquery_ujs
 //= require emitter
 //= require dropzone
-//= require welcome

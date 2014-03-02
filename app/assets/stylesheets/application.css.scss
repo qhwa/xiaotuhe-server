@@ -20,6 +20,14 @@ body {
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif/*rtl:"Droid Arabic Kufi", "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif */
 }
 
+a {
+    &.brand {
+        color: #A1CF64;
+        text-decoration: none;
+        font-weight: normal;
+    }
+}
+
 .hidden {
     display: none;
 }
