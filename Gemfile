@@ -49,4 +49,3 @@ gem 'semantic-ui-sass', '~> 0.13.1.0'
 gem 'mina'
 gem 'unicorn'
 gem 'therubyracer'
-gem "requirejs-rails", :git => "https://github.com/jwhitley/requirejs-rails.git"
