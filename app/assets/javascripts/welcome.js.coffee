@@ -6,13 +6,14 @@ jQuery ($) ->
   progressBar = $('.progress').hide()
 
   options = {
-    previewsContainer: "#previews"
+    previewsContainer:  "#previews"
     autoProcessQueue:   false
     maxFiles:           5000
-
+    url:                "/shares"
+    clickable:          "#dropzone"
   }
 
-  myDropzone = new Dropzone( dom, options )
+  myDropzone = new Dropzone( document.body, options )
 
   _.extend myDropzone,
 
@@ -27,6 +28,7 @@ jQuery ($) ->
           @processQueue()
         , 5
       else
+        @processing = true
         @uploadMultipleFiles()
 
       @disable()
@@ -82,9 +84,8 @@ jQuery ($) ->
       @processQueue()
 
     @on "success", (file) ->
-      if @singleFile
-        @key = JSON.parse( file.xhr.response ).id
-
+      id = JSON.parse( file.xhr.response ).id
+      @key = id if id
       @onSuccess() if @allSuccessful()
 
     @on "dragover", () ->
@@ -99,12 +100,18 @@ jQuery ($) ->
     @on "sending", (file, xhr, formData) ->
       formData.append "path", file.fullPath
 
-    @on "drop", (evt) ->
+    @on "addedfile", (evt) ->
       $(dom)
         .removeClass( 'inverted' )
         .addClass( 'working' )
 
       $('.dz-message', dom).hide()
+      unless @processing
+        setTimeout ()=>
+          @processQueue()
+        ,5
+
+    @on "drop", (evt) ->
       @processDrop( evt.dataTransfer.items )
 
     ).call myDropzone

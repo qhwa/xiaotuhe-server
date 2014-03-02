@@ -3,12 +3,12 @@ h1.ui.green.header
   | 小兔盒
 
 #success-message.hidden
-  .ui.icon.message
-    img src="http://s.lw.aliimg.com/image/magic_face/1/24.gif"
+  .blue.ui.icon.message
+    img src="http://s.lw.aliimg.com/image/magic_face/1/24.gif" width="100" height="100"
 
     .content
       .header
-        | All your files are received!
+        | All files received!
       p
         span.total-files-count 99
         |  file(s) uploaded in 
@@ -23,7 +23,8 @@ form#dropzone.ui.green.segment.dropzone action="/shares"
 
   #previews.dropzone-previews
 
+  .indicator.dz-default.dz-message
+    span Drop files here to upload
+
 .ui.green.progress
   .bar
-
-
