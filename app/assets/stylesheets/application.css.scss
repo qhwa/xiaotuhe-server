@@ -8,12 +8,17 @@
  * You're free to add application-wide styles to this file and they'll appear at the top of the
  * compiled file, but it's generally better to create a new file per style scope.
  *
+ *= require dropzone
  */
 @import "semantic-ui";
 
 body {
   color: #888;
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif/*rtl:"Droid Arabic Kufi", "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif */
+}
+
+.hidden {
+    display: none;
 }
 
 .main {
@@ -23,4 +28,20 @@ body {
 
 .info {
     color: #ccc;
+}
+
+#dropzone {
+
+    min-height: 15em;
+    max-height: 25em;
+    overflow: auto;
+
+    &.dover {
+        background-color: rgb(240, 255, 240);
+    }
+
+    &.working {
+
+    }
+
 }

@@ -1,6 +1,11 @@
 XthHost::Application.routes.draw do
 
-  resources :shares, defaults: { format: :json }
+  root 'welcome#index'
+  resources :shares, defaults: { format: :json } do
+    member do
+      post 'append', constraints: { id: /\w+/ }
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -18,7 +18,13 @@ set :branch, 'master'
 set :unicorn_config,  "#{deploy_to}/shared/config/unicorn.rb"
 set :unicorn_pid,     "#{deploy_to}/tmp/pids/unicorn.pid"
 
-set :shared_paths, ['config/database.yml', 'log', 'config/unicorn.rb', 'config/initializers/secret_token.rb']
+set :shared_paths, [
+  'config/database.yml',
+  'log',
+  'config/unicorn.rb',
+  'config/initializers/secret_token.rb',
+  'db'
+]
 
 task :environment do
   invoke :'rvm:use[ruby-2.1.1@default]'
@@ -50,6 +56,7 @@ task :deploy => :environment do
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
+    invoke :'rails:assets_precompile'
     invoke :'rails:db_migrate'
   end
 end

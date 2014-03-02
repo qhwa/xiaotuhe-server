@@ -1,0 +1,28 @@
+h1.ui.green.header
+  i.inbox.icon
+  | 小兔盒
+
+form#dropzone.ui.green.segment.dropzone action="/shares/append"
+
+  #previews.dropzone-previews
+
+.ui.green.progress
+  .bar
+
+
+#success-message.hidden
+  .ui.icon.message
+    img src="http://s.lw.aliimg.com/image/magic_face/1/24.gif"
+
+    .content
+      .header
+        | All your files are received!
+      p
+        span.total-files-count 99
+        |  file(s) uploaded in 
+        span.duration 5
+        |  seconds. Visited them with:
+
+      p 
+        a#view-url href="http://localhost:3000/shares/b70026e082da90b8334f" rel="nofollow"
+          | http://localhost:3000/shares/b70026e082da90b8334f
