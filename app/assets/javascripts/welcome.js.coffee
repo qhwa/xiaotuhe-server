@@ -11,18 +11,19 @@ jQuery ($) ->
     maxFiles:           5000
 
     init: ->
+
       @on "complete", (file) ->
         if file.status != "success"
           @failures.push file
 
         if @allSuccessful()
-          onSuccess()
+          @onSuccess()
         
         @processQueue()
 
-
-      @on "addedfile", (file) ->
-        console.log "added file", file
+      @on "success", (file) ->
+        if @singleFile
+          @key = JSON.parse( file.xhr.response ).id
 
       @on "dragover", () ->
         $(dom).addClass 'inverted'
@@ -38,58 +39,76 @@ jQuery ($) ->
         console.log xhr
         formData.append "path", file.fullPath
 
-      @on "drop", () ->
+      @on "drop", (evt) ->
         $(dom)
           .removeClass( 'inverted' )
           .addClass( 'working' )
 
         $('.dz-message', dom).hide()
-
-        $.ajax
-          url:      'shares'
-          dataType: 'json'
-          type:     'POST'
-
-        .success (data) =>
-          if data.success
-            progressBar.show()
-            @failures = []
-            @startTime = new Date
-            @key = data.id
-            @options.url = "/shares/#{@key}/append"
-            @processQueue()
-          else
-            console.log 'Fail creating share!'
-
-        .fail () ->
-          console.log 'Fail creating share!'
-
-        @.disable()
+        @processDrop( evt.dataTransfer.items )
   }
 
   myDropzone = new Dropzone( dom, options )
-  myDropzone.failures = []
-  myDropzone.allSuccessful = () ->
-    _.isEmpty( @getQueuedFiles() ) &&
-    _.isEmpty( @getUploadingFiles() ) &&
-    _.isEmpty( @failures )
+
+  _.extend myDropzone,
+
+    failures: []
+
+    processDrop: (items) ->
+      @startTime  = new Date
+      @singleFile = @isSingleFileDropped(items)
+
+      if @singleFile
+        setTimeout ()=>
+          @processQueue()
+        , 5
+      else
+        @uploadMultipleFiles()
+
+      @disable()
+      progressBar.show()
+
+    isSingleFileDropped: (items)->
+      items.length == 1 && items[0].webkitGetAsEntry().isFile
+
+    uploadMultipleFiles: ()->
+      $.ajax
+        url:      'shares'
+        dataType: 'json'
+        type:     'POST'
+
+      .success (data) =>
+        if data.success
+          @failures = []
+          @key = data.id
+          @options.url = "/shares/#{@key}/append"
+          @processQueue()
+        else
+          console.log 'Fail creating share!'
+      .fail () ->
+        console.log 'Fail creating share!'
 
 
-  onSuccess = ()->
-    progressBar.addClass('successful')
-    msg = $('#success-message')
-    msg.show()
-    $('.total-files-count', msg).text( myDropzone.files.length )
+    onSuccess: ()->
+      progressBar.addClass('successful')
+      msg = $('#success-message')
+      msg.show()
+      $('.total-files-count', msg).text( @files.length )
 
-    duration = ((new Date) - myDropzone.startTime)/1000.0
-    $('.duration', msg).text( duration )
+      duration = ((new Date) - @startTime)/1000.0
+      $('.duration', msg).text( duration )
 
-    url = [
-      location.origin
-      "/shares/"
-      myDropzone.key
-      ".html"
-    ].join ""
+      url = [
+        location.origin
+        "/shares/"
+        @key
+        ".html"
+      ].join ""
 
-    $('#view-url').attr('href', url).text( url )
-    
+      $('#view-url').attr('href', url).text( url )
+
+    allSuccessful: () ->
+      _.isEmpty( @getQueuedFiles() ) &&
+      _.isEmpty( @getUploadingFiles() ) &&
+      _.isEmpty( @failures )
+
