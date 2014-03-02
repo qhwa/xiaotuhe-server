@@ -23,6 +23,8 @@ set :shared_paths, [
   'log',
   'config/unicorn.rb',
   'config/initializers/secret_token.rb',
+  'public/uploads',
+  'public/shares',
   'db'
 ]
 
