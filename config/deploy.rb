@@ -60,6 +60,11 @@ task :deploy => :environment do
     invoke :'bundle:install'
     invoke :'rails:assets_precompile'
     invoke :'rails:db_migrate'
+
+    to :launch do
+      invoke :restart
+    end
+
   end
 end
 
