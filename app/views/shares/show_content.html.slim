@@ -1,0 +1,6 @@
+ul
+  - if @path.present?
+    li= entry_tag '..', @path
+
+  - @entries.each do |entry|
+    li= entry_tag entry, @path
