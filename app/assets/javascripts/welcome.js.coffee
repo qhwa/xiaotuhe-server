@@ -122,3 +122,6 @@ class @WelcomeCtrl
 
 
       ).call myDropzone
+
+
+@WelcomeCtrl['$inject'] = ['$scope']
