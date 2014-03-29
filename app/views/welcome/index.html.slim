@@ -1,28 +1,26 @@
-#success-message.hidden
-  .green.ui.icon.message
-    img src="http://s.lw.aliimg.com/image/magic_face/1/24.gif" width="100" height="100"
+.main-app( ng-app ng-controller="WelcomeCtrl" )
 
-    .content
-      .header
-        | All files received!
-      p
-        span.total-files-count 99
-        |  file(s) uploaded in 
-        span.duration 5
-        |  seconds. Visited them with:
+  #success-message ng-show="state == 'success'"
+    .green.ui.icon.message
+      img src="http://s.lw.aliimg.com/image/magic_face/1/24.gif" width="100" height="100"
 
-      p 
-        a#view-url href="http://localhost:3000/shares/b70026e082da90b8334f" rel="nofollow"
-          | http://localhost:3000/shares/b70026e082da90b8334f
+      .content
+        .header All files received!
+        p
+          | {{files_count}} file(s) uploaded in {{elapsed}} seconds.
 
-form#dropzone.ui.green.segment.dropzone action="/shares"
+        p 
+          a#view-url.ui.button href="{{view_url}}" rel="nofollow" see it
 
-  #previews.dropzone-previews
+        p redirect in {{count_down}} seconds.
 
-  .indicator.dz-default.dz-message
-    span Drop files here to upload
+  #dropzone.ui.green.segment.dropzone action="/shares" ng-class="{processing: processing, inverted: dragged_over}"
+    form
+      #previews.dropzone-previews
 
-.ui.green.progress
-  .bar
+    .dz-message.dz-default ng-show="state == 'ready'"
 
-= javascript_include_tag :welcome
+  .ui.green.progress ng-show="state == 'processing'" ng-class="{successful:state=='success'}"
+    .bar style="width: {{progress}}%"
+
+  = javascript_include_tag :welcome

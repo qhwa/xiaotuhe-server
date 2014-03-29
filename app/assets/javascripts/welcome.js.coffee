@@ -1,117 +1,123 @@
+#= require 'angular'
+"use strict"
+
 Dropzone.autoDiscover = false
 
-jQuery ($) ->
+class @WelcomeCtrl
 
-  dom = $('#dropzone').get(0)
-  progressBar = $('.progress').hide()
+  constructor: ($scope) ->
 
-  options = {
-    previewsContainer:  "#previews"
-    autoProcessQueue:   false
-    maxFiles:           5000
-    url:                "/shares"
-    clickable:          "#dropzone"
-  }
+    $scope.state        = 'ready'
+    $scope.dragged_over = false
+    dom                 = $('#dropzone')
 
-  myDropzone = new Dropzone( document.body, options )
+    options = {
+      previewsContainer:  "#previews"
+      autoProcessQueue:   false
+      maxFiles:           5000
+      url:                "/shares"
+      clickable:          "#dropzone"
+    }
 
-  _.extend myDropzone,
+    myDropzone = new Dropzone( document.body, options )
 
-    failures: []
+    _.extend myDropzone,
 
-    processDrop: (items) ->
-      @startTime  = new Date
-      @singleFile = @isSingleFileDropped(items)
+      failures: []
 
-      if @singleFile
-        setTimeout ()=>
-          @processQueue()
-        , 5
-      else
-        @processing = true
-        @uploadMultipleFiles()
+      processDrop: (items) ->
+        @singleFile = @isSingleFileDropped(items)
 
-      @disable()
-      progressBar.show()
+      isSingleFileDropped: (items)->
+        items.length == 1 && items[0].webkitGetAsEntry().isFile
 
-    isSingleFileDropped: (items)->
-      items.length == 1 && items[0].webkitGetAsEntry().isFile
+      uploadMultipleFiles: ()->
+        $.ajax
+          url:      'shares'
+          dataType: 'json'
+          type:     'POST'
 
-    uploadMultipleFiles: ()->
-      $.ajax
-        url:      'shares'
-        dataType: 'json'
-        type:     'POST'
+        .success (data) =>
+          if data.success
+            @failures    = []
+            @key         = data.id
+            @options.url = "/shares/#{@key}/append"
+            @processQueue()
+          else
+            console.log 'Fail creating share!'
+        .fail () ->
+          console.log 'Fail creating share!'
 
-      .success (data) =>
-        if data.success
-          @failures = []
-          @key = data.id
-          @options.url = "/shares/#{@key}/append"
+      onSuccess: ()->
+        $scope.$apply =>
+          $scope.state = 'success'
+          $scope.elapsed = ((new Date) - @startTime)/1000.0
+          $scope.view_url = [
+            location.origin
+            "/shares/"
+            @key
+            ".html"
+          ].join ""
+
+          $scope.count_down = 8
+          @countDown()
+
+      allSuccessful: () ->
+        _.isEmpty( @getQueuedFiles() ) &&
+        _.isEmpty( @getUploadingFiles() ) &&
+        _.isEmpty( @failures )
+
+      countDown: ->
+        $scope.$apply ->
+          $scope.count_down -= 1
+
+        if $scope.count_down <= 0
+          @redirect()
+        else
+          setTimeout @countDown.bind(@), 1000
+
+      redirect: ->
+        location.href = $scope.view_url
+
+
+    (()->
+
+      @on "complete", (file) ->
+        @failures.push( file ) unless file.status == "success"
+        @processQueue()
+
+      @on "success", (file) ->
+        id = JSON.parse( file.xhr.response ).id
+        @key = id if id
+        @onSuccess() if @allSuccessful()
+
+      @on "dragover", () ->
+        $scope.$apply () ->
+          $scope.dragged_over = true
+
+      @on "dragleave", () ->
+        $scope.$apply () ->
+          $scope.dragged_over = false
+
+      @on "totaluploadprogress", (per) ->
+        $scope.progress = per
+
+      @on "sending", (file, xhr, formData) ->
+        formData.append "path", file.fullPath
+
+      @on "drop", (evt) ->
+        @processDrop( evt.dataTransfer.items )
+
+      @on "queued", (evt) ->
+        @startTime          = new Date
+        $scope.files_count  = @files.length
+        $scope.dragged_over = false
+        $scope.state        = 'processing'
+
+        if @singleFile
           @processQueue()
         else
-          console.log 'Fail creating share!'
-      .fail () ->
-        console.log 'Fail creating share!'
+          @uploadMultipleFiles()
 
-    onSuccess: ()->
-      progressBar.addClass('successful')
-      msg = $('#success-message')
-      msg.show()
-      $('.total-files-count', msg).text( @files.length )
 
-      duration = ((new Date) - @startTime)/1000.0
-      $('.duration', msg).text( duration )
-
-      url = [
-        location.origin
-        "/shares/"
-        @key
-        ".html"
-      ].join ""
-
-      $('#view-url').attr('href', url).text( url )
-
-    allSuccessful: () ->
-      _.isEmpty( @getQueuedFiles() ) &&
-      _.isEmpty( @getUploadingFiles() ) &&
-      _.isEmpty( @failures )
-
-  (()->
-
-    @on "complete", (file) ->
-      @failures.push( file ) unless file.status == "success"
-      @processQueue()
-
-    @on "success", (file) ->
-      id = JSON.parse( file.xhr.response ).id
-      @key = id if id
-      @onSuccess() if @allSuccessful()
-
-    @on "dragover", () ->
-      $(dom).addClass 'inverted'
-
-    @on "dragleave", () ->
-      $(dom).removeClass 'inverted'
-
-    @on "totaluploadprogress", (per) ->
-      $('.bar', progressBar).css width: "#{per}%"
-
-    @on "sending", (file, xhr, formData) ->
-      formData.append "path", file.fullPath
-
-    @on "addedfile", (evt) ->
-      $(dom)
-        .removeClass( 'inverted' )
-        .addClass( 'working' )
-
-      $('.dz-message', dom).hide()
-      unless @processing
-        setTimeout ()=>
-          @processQueue()
-        ,5
-
-    @on "drop", (evt) ->
-      @processDrop( evt.dataTransfer.items )
-
-    ).call myDropzone
+      ).call myDropzone

@@ -438,7 +438,7 @@ class Dropzone extends Em
 
     # Backwards compatibility
     if @options.acceptedMimeTypes
-      @options.acceptedFiles = @options.acceptedMimeTypes 
+      @options.acceptedFiles = @options.acceptedMimeTypes
       delete @options.acceptedMimeTypes
 
     @options.method = @options.method.toUpperCase()
@@ -503,6 +503,7 @@ class Dropzone extends Em
         @hiddenFileInput.addEventListener "change", =>
           files = @hiddenFileInput.files
           @addFile file for file in files if files.length
+          @emit 'queued'
           setupHiddenFileInput()
       setupHiddenFileInput()
 
@@ -709,6 +710,8 @@ class Dropzone extends Em
         @_addFilesFromItems items
       else
         @handleFiles files
+
+      @emit "queued"
     return
 
   paste: (e) ->
