@@ -26,7 +26,7 @@ class @WelcomeCtrl
       failures: []
 
       processDrop: (items) ->
-        @singleFile = @isSingleFileDropped(items)
+        @multiple = !@isSingleFileDropped(items)
 
       isSingleFileDropped: (items)->
         items.length == 1 && items[0].webkitGetAsEntry().isFile
@@ -59,7 +59,7 @@ class @WelcomeCtrl
             ".html"
           ].join ""
 
-          $scope.count_down = 8
+          $scope.count_down = 5
           @countDown()
 
       allSuccessful: () ->
@@ -103,6 +103,7 @@ class @WelcomeCtrl
         $scope.progress = per
 
       @on "sending", (file, xhr, formData) ->
+        console.log file
         formData.append "path", file.fullPath
 
       @on "drop", (evt) ->
@@ -114,10 +115,10 @@ class @WelcomeCtrl
         $scope.dragged_over = false
         $scope.state        = 'processing'
 
-        if @singleFile
-          @processQueue()
-        else
+        if @multiple
           @uploadMultipleFiles()
+        else
+          @processQueue()
 
 
       ).call myDropzone
