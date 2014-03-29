@@ -4,7 +4,19 @@ XthHost::Application.routes.draw do
   resources :shares, defaults: { format: :json } do
     member do
       post 'append', constraints: { id: /\w+/ }
+
+      scope :unzip do
+
+        root action: 'show_content',
+          format: 'html'
+
+        get '*path',
+          action: 'show_content',
+          format: 'html', 
+          as:     'show_content'
+      end
     end
+
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -1,6 +1,6 @@
 class SharesController < ApplicationController
 
-  before_filter :find_share, only: [:show, :append]
+  before_filter :find_share, only: [:show, :append, :show_content]
 
   def create
     @share = Share.new app_params
@@ -19,6 +19,13 @@ class SharesController < ApplicationController
     path = params[:path]
     if file.present? && path.present?
       @share.append_file! file, path
+    end
+  end
+
+  def show_content
+    @path = params[:path] || ''
+    if @share.unzipped?
+      @entries = @share / @path
     end
   end
 

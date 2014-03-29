@@ -52,11 +52,21 @@ class Share < ActiveRecord::Base
   end
 
   def append_file! file, path
-    raise "invalid path" if path =~ %r{\.\./}
+    raise "invalid path" if secure_path?(path)
     full_path = File.join( extract_target_dir, path )
     mkdir_p File.dirname( full_path )
     cp file.path, full_path
     chmod 0644, full_path
+  end
+
+  def / path
+    raise "invalid path" if secure_path?(path)
+    if unzipped?
+      full_path = File.join extract_target_dir, path 
+      Dir.entries( full_path ).reject do |p|
+        p =~ /^\.+$/
+      end
+    end
   end
 
   private
@@ -69,4 +79,7 @@ class Share < ActiveRecord::Base
       File.join Rails.application.root, "public", extract_path
     end
 
+    def secure_path? path
+     !!(path =~ %r{\.\./})
+    end
 end
