@@ -23,6 +23,7 @@ set :shared_paths, [
   'log',
   'config/unicorn.rb',
   'config/initializers/secret_token.rb',
+  'config/initializers/google_analytics.rb',
   'public/uploads',
   'public/shares',
   'db'
