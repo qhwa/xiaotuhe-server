@@ -46,7 +46,11 @@ gem 'slim'
 gem 'rubyzip'
 gem 'string_utf8'
 gem 'semantic-ui-sass'
-gem 'mina'
 gem 'unicorn'
 gem 'therubyracer'
 gem 'mime-types'
+
+group :development do
+  gem 'coffee-rails-source-maps'
+  gem 'mina'
+end
