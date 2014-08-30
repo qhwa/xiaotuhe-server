@@ -60,16 +60,33 @@ class Share < ActiveRecord::Base
   end
 
   def / path
-    raise "invalid path" if secure_path?(path)
     if unzipped?
-      full_path = File.join extract_target_dir, path 
-      Dir.entries( full_path ).reject do |p|
+      Dir.entries( full_path( path ) ).reject do |p|
         p =~ /^\.+$/
-      end
+      end.map {|f| [f, File.directory?(f)]}.sort do |a, b|
+        if a[1] == b[1]
+          a[0] <=> b[0]
+        else
+          a[1] ? -1 : 1
+        end
+      end.map(&:first)
     end
   end
 
+  def entry_size path
+    File.size( full_path(path) )
+  end
+
+  def folder? path
+    File.directory?( full_path(path) )
+  end
+
   private
+
+    def full_path( path )
+      raise "invalid path" if secure_path?(path)
+      File.join extract_target_dir, path 
+    end
 
     def gen_key
       self.key ||= SecureRandom.hex(10)

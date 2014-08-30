@@ -1,6 +1,35 @@
-ul
-  - if @path.present?
-    li= entry_tag '..', @path
+table.ui.basic.sortable.table
+  thead
+    tr
+      th name
+      th size
 
-  - @entries.each do |entry|
-    li= entry_tag entry, @path
+  tbody
+    - if @path.present?
+      tr
+        td
+          i.folder.outline.icon
+          = entry_tag '..', base: @path
+        td
+
+    - @entries.each do |entry|
+      tr.entry
+        - file = File.join( @path, entry )
+        - if @share.folder? file
+          td
+            i.folder.outline.icon
+            = entry_tag entry, base: @path
+          td
+
+        - else
+          td
+            i.text.file.outline.icon
+            = entry_tag entry, base: @path, html_opts: { target: '_blank' }
+          td= entry_size file
+
+
+javascript:
+  $(function(){
+    $('table').tablesort();
+  });
+

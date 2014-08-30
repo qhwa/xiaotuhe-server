@@ -1,4 +1,3 @@
-#= require 'angular'
 "use strict"
 
 Dropzone.autoDiscover = false
@@ -25,10 +24,20 @@ class @WelcomeCtrl
 
       failures: []
 
-      processDrop: (items) ->
-        @multiple = !@isSingleFileDropped(items)
+      processDrop: () ->
+        @startTime          = new Date
+        $scope.files_count  = @files.length
+        $scope.dragged_over = false
+        $scope.state        = 'processing'
 
-      isSingleFileDropped: (items)->
+        if @multiple
+          @uploadMultipleFiles()
+        else
+          @processQueue()
+
+      isSingleFileDropped: ()->
+        items = @getQueuedFiles()
+        console.log items
         items.length == 1 && items[0].webkitGetAsEntry().isFile
 
       uploadMultipleFiles: ()->
@@ -50,15 +59,9 @@ class @WelcomeCtrl
 
       onSuccess: ()->
         $scope.$apply =>
-          $scope.state = 'success'
-          $scope.elapsed = ((new Date) - @startTime)/1000.0
-          $scope.view_url = [
-            location.origin
-            "/shares/"
-            @key
-            ".html"
-          ].join ""
-
+          $scope.state      = 'success'
+          $scope.elapsed    = ((new Date) - @startTime)/1000.0
+          $scope.view_url   = "#{location.origin}/shares/#{@key}.html"
           $scope.count_down = 5
           @countDown()
 
@@ -103,23 +106,18 @@ class @WelcomeCtrl
         $scope.progress = per
 
       @on "sending", (file, xhr, formData) ->
-        console.log file
-        formData.append "path", file.fullPath
+        formData.append "path", file.fullPath || file.name
 
       @on "drop", (evt) ->
-        @processDrop( evt.dataTransfer.items )
+        @multiple = !@isSingleFileDropped(evt.items)
 
-      @on "queued", (evt) ->
-        @startTime          = new Date
-        $scope.files_count  = @files.length
-        $scope.dragged_over = false
-        $scope.state        = 'processing'
+      @on "queuecomplete", (evt) ->
 
-        if @multiple
-          @uploadMultipleFiles()
-        else
-          @processQueue()
-
+      @on "addedfile", (evt) ->
+        clearTimeout @process_lock
+        @process_lock = setTimeout =>
+          @processDrop()
+        , 1000
 
       ).call myDropzone
 

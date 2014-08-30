@@ -18,3 +18,5 @@ _yardoc
 doc/
 *.log
 uploads
+public/assets/source_maps
+public/shares

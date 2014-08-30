@@ -13,5 +13,8 @@
 //= require underscore-min
 //= require jquery
 //= require jquery_ujs
+//= require angular
 //= require emitter
 //= require dropzone
+//= require jquery.tablesort
+//= require welcome

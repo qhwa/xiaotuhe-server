@@ -68,3 +68,14 @@ sup.beta {
 #success-message {
     margin-top: 1em;
 }
+
+
+a.entry {
+  color: #666;
+  transition: color ease 0.3s;
+  text-decoration: none;
+
+  &:hover {
+    color: #A1CF64;
+  }
+}
