@@ -64,7 +64,7 @@ class @WelcomeCtrl
           $scope.elapsed    = ((new Date) - @startTime)/1000.0
           $scope.view_url   = "#{location.origin}/shares/#{@key}.html"
           $scope.count_down = 5
-          #@countDown()
+          @countDown()
 
       allSuccessful: () ->
         _.isEmpty( @getQueuedFiles() ) &&
