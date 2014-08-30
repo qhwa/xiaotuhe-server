@@ -25,10 +25,11 @@ class @WelcomeCtrl
       failures: []
 
       processDrop: () ->
+        @multiple = @multiple || @getQueuedFiles().length > 1
         @startTime          = new Date
         $scope.files_count  = @files.length
         $scope.dragged_over = false
-        $scope.state        = 'processing'
+        $scope.$apply -> $scope.state = 'processing'
 
         if @multiple
           @uploadMultipleFiles()
@@ -63,7 +64,7 @@ class @WelcomeCtrl
           $scope.elapsed    = ((new Date) - @startTime)/1000.0
           $scope.view_url   = "#{location.origin}/shares/#{@key}.html"
           $scope.count_down = 5
-          @countDown()
+          #@countDown()
 
       allSuccessful: () ->
         _.isEmpty( @getQueuedFiles() ) &&
@@ -109,7 +110,6 @@ class @WelcomeCtrl
         formData.append "path", file.fullPath || file.name
 
       @on "drop", (evt) ->
-        @multiple = !@isSingleFileDropped(evt.items)
 
       @on "queuecomplete", (evt) ->
 
