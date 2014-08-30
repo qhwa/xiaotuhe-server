@@ -29,7 +29,6 @@ class @WelcomeCtrl
         @startTime          = new Date
         $scope.files_count  = @files.length
         $scope.dragged_over = false
-        $scope.$apply -> $scope.state = 'processing'
 
         if @multiple
           @uploadMultipleFiles()
@@ -114,6 +113,7 @@ class @WelcomeCtrl
       @on "queuecomplete", (evt) ->
 
       @on "addedfile", (evt) ->
+        $scope.$apply -> $scope.state = 'processing'
         clearTimeout @process_lock
         @process_lock = setTimeout =>
           @processDrop()
