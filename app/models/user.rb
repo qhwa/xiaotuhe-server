@@ -3,7 +3,6 @@ class User < ActiveRecord::Base
   class << self
 
     def find_or_create_from_auth_hash(auth)
-      p auth
       locate_email(auth) || create_user(auth)
     end
 
