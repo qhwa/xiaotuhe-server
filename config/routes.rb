@@ -19,6 +19,10 @@ XthHost::Application.routes.draw do
 
   end
 
+  get "auth/:provider/callback" => 'sessions#create'
+  get "signin" => 'sessions#new'
+  match "signout" => 'sessions#destroy', via: [:get, :delete]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

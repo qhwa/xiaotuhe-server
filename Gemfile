@@ -49,6 +49,7 @@ gem 'semantic-ui-sass'
 gem 'unicorn'
 gem 'therubyracer'
 gem 'mime-types'
+gem 'omniauth-github'
 
 group :development do
   gem 'coffee-rails-source-maps'
