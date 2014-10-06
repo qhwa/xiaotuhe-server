@@ -8,6 +8,7 @@ class Share < ActiveRecord::Base
 
   mount_uploader :file, FileUploader
 
+  belongs_to :user, counter_cache: true
   alias_attribute :name, :original_name
 
   validates :key, presence: true, uniqueness: true

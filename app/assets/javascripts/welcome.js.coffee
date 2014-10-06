@@ -16,6 +16,8 @@ class @WelcomeCtrl
       maxFiles:           5000
       url:                "/shares"
       clickable:          "#dropzone"
+      headers:
+        'X-CSRF-Token': $('meta[name=csrf-token]').attr('content')
     }
 
     myDropzone = new Dropzone( document.body, options )

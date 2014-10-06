@@ -1,9 +1,16 @@
 class SharesController < ApplicationController
 
-  before_filter :find_share, only: [:show, :append, :show_content]
+  before_action :find_share, only: [:show, :append, :show_content]
+  before_action :require_user, only: [:mine]
+
+  # GET /mine.html
+  def mine
+    @shares = current_user.shares.page(params[:page])
+  end
 
   def create
     @share = Share.new app_params
+    @share.user = current_user if current_user.present?
     if @share.save
       @share.unzip
     else

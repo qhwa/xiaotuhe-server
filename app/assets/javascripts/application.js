@@ -18,3 +18,20 @@
 //= require dropzone
 //= require jquery.tablesort
 //= require welcome
+//= require dropdown
+//= require_self
+
+"use strict"
+
+$.ajaxSetup({
+  beforeSend: function(xhr){
+    var token = $('meta[name=csrf-token]').attr('content');
+    if(token) {
+      xhr.setRequestHeader( "X-CSRF-Token", token )
+    }
+  }
+})
+
+$(function($){
+  $('.ui.dropdown').dropdown();
+});

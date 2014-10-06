@@ -4,8 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
   def current_user
+    return nil unless session[:user_id].present?
     @current_user ||= User.find(session[:user_id])
   end
+
+  helper_method :current_user
 
   def current_user=(user)
     if user.present?
@@ -22,5 +25,12 @@ class ApplicationController < ActionController::Base
         success: false,
         msg: msg
       }
+    end
+
+    def require_user
+      unless current_user.present?
+        redirect_to signin_url
+        false
+      end
     end
 end

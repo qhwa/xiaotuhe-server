@@ -40,6 +40,7 @@ sup.beta {
 .main {
     max-width: 800px;
     margin: 0 auto;
+    padding-bottom: 100px;
 }
 
 .info {
@@ -70,12 +71,27 @@ sup.beta {
 }
 
 
+a {
+  color: #009FDA;
+  text-decoration: none;
+
+  &:hover {
+    color: #00BAFF;
+  }
+
+  &:visited {
+    color: #666;
+  }
+}
+
 a.entry {
   color: #666;
-  transition: color ease 0.3s;
-  text-decoration: none;
 
   &:hover {
     color: #A1CF64;
   }
+}
+
+.share-list {
+  margin-bottom: 2rem;
 }

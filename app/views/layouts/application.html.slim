@@ -16,11 +16,30 @@ html
   body
     .wrap
       .main
-        h1.ui.green.header
-          = link_to root_url, class: 'green brand' do
-            i.inbox.icon
-            | 小兔盒
-          sup.beta  beta
+        .ui.menu
+          .green.item
+            = link_to root_url, class: 'green brand' do
+              i.inbox.icon
+              | 小兔盒
+              sup.beta  beta
+          .right.menu
+            - if current_user.present?
+              .ui.poiting.dropdown.link.item
+                = current_user.name
+                i.dropdown.icon
+                .menu
+                  .item
+                    i.plus.icon
+                    = link_to "Add a Share", root_path
+                  .item
+                    i.attachment.icon
+                    = link_to "My shares", my_shares_path
+                  .item
+                    i.sign.out.icon
+                    = link_to "Sign out", signout_path
+            - else
+              .item
+                = link_to 'login', signin_path
 
         = yield
 

@@ -1,0 +1,18 @@
+.ui.header My shares
+- if @shares.present?
+  table.ui.basic.table.share-list
+    thead
+      tr
+        th Name
+        th Time
+    tbody
+      - @shares.each do |share|
+        tr
+          td= link_to share.original_name, share_path(share, format: :html)
+          td= share.created_at.to_formatted_s(:long)
+
+  = paginate @shares
+
+- else
+  | You have no files shared. 
+  = link_to 'add some', root_path

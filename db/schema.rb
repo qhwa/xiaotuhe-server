@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141005095111) do
+ActiveRecord::Schema.define(version: 20141006080642) do
 
   create_table "shares", force: true do |t|
     t.string   "file"
@@ -21,16 +21,19 @@ ActiveRecord::Schema.define(version: 20141005095111) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "original_name"
+    t.integer  "user_id"
   end
 
   add_index "shares", ["content_type"], name: "index_shares_on_content_type"
   add_index "shares", ["key"], name: "index_shares_on_key"
+  add_index "shares", ["user_id"], name: "index_shares_on_user_id"
 
   create_table "users", force: true do |t|
     t.string   "name"
     t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "shares_count", default: 0
   end
 
   add_index "users", ["email"], name: "index_users_on_email"

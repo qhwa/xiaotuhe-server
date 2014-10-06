@@ -20,3 +20,4 @@ doc/
 uploads
 public/assets/source_maps
 public/shares
+db/*.sqlite3
