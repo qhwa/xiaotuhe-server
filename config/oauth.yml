@@ -1,0 +1,27 @@
+defaults: &defaults
+
+  github:
+    app_id:     4abfd60c159efa6a8a27
+    app_secret: 62d9746bfcf8b75659b63e176228555ee606d231
+
+  weibo:
+    app_id:     2136304406
+    app_secret: 40b534e9388ab11a6558a6093805c96f
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+
+  github:
+    # Get config from https://github.com/settings/applications/28336
+    app_id:     YOUR_GITHUB_APP_ID
+    app_secret: YOUR_GITHUB_APP_SECRET
+
+  weibo:
+    # Get config from http://open.weibo.com/webmaster
+    app_id:     YOUR_WEIBO_APP_ID
+    app_secret: YOUR_WEIBO_APP_SECRET

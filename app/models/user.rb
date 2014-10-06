@@ -7,15 +7,30 @@ class User < ActiveRecord::Base
     end
 
     def locate_email(auth)
-      User.find_by( email: auth[:info][:email] )
+      email = extract_email(auth)
+      return nil unless email.present?
+      User.find_by( email: email )
     end
 
     def create_user(auth)
+      # DEBUG
+      # require 'pp'
+      # pp auth
+      info = auth[:info]
       create!(
-        :name  => auth[:info][:nickname],
-        :email => auth[:info][:email]
+        :name  => info[:nickname],
+        :email => extract_email(auth)
       )
     end
+
+    private
+
+      def extract_email(auth)
+        email = auth[:info][:email]
+        return email if email.present?
+
+        [auth[:uid], auth[:provider]].join('@@')
+      end
 
   end
 

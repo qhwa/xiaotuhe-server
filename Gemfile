@@ -50,6 +50,7 @@ gem 'unicorn'
 gem 'therubyracer'
 gem 'mime-types'
 gem 'omniauth-github'
+gem 'omniauth-weibo-oauth2'
 gem 'kaminari'
 
 group :development do

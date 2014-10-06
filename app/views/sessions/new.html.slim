@@ -1,4 +1,10 @@
 .ui.header login with
-= link_to url_for('/auth/github'), class: 'ui button' do
-  i.large.github.icon
-  | github
+
+.ui.buttons
+  = link_to url_for('/auth/github'), class: 'ui button' do
+    i.large.github.icon
+    | github
+
+  = link_to url_for('/auth/weibo'), class: 'ui button' do
+    i.large.weibo.icon
+    | weibo
