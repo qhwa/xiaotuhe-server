@@ -1,0 +1,14 @@
+defaults: &defaults
+  app_id:     4abfd60c159efa6a8a27
+  app_secret: 62d9746bfcf8b75659b63e176228555ee606d231
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  # Get config from https://github.com/settings/applications/28336
+  app_id:     YOUR_GITHUB_APP_ID
+  app_secret: YOUR_GITHUB_APP_SECRET

@@ -20,12 +20,13 @@ set :unicorn_pid,     "#{deploy_to}/tmp/pids/unicorn.pid"
 
 set :shared_paths, [
   'config/database.yml',
-  'log',
+  'config/github_oauth.yml',
   'config/unicorn.rb',
   'config/initializers/secret_token.rb',
   'config/initializers/google_analytics.rb',
   'public/uploads',
   'public/shares',
+  'log',
   'db'
 ]
 
