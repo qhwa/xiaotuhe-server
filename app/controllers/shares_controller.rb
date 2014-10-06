@@ -12,6 +12,8 @@ class SharesController < ApplicationController
     @share = Share.new app_params
     @share.user = current_user if current_user.present?
     if @share.save
+      @attached = current_user.present?
+      session[:ghost_share_id] = @share.id unless @attached
       @share.unzip
     else
       render_failure_json msg: @share.errors
@@ -45,5 +47,11 @@ class SharesController < ApplicationController
     def find_share
       @share = Share.find_by key: params[:id]
     end
+
+    def can_attach_share? share
+      session[:ghost_share_id] == share.id
+    end
+
+    helper_method :can_attach_share?
 
 end

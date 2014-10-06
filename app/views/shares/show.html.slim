@@ -1,4 +1,11 @@
+- if !current_user.present? and can_attach_share?( @share )
+  .ui.message
+    | This share will be deleted soon. 
+    = link_to "Sign in", signin_path( back_to: request.url ), class:'ui mini blue button'
+    |  to save it to your account.
+  
 .ui.segment
+
   h4.ui.ribbon.green.label
     i.time.icon
     = @share.updated_at.to_s(:long)
