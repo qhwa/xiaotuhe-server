@@ -27,7 +27,7 @@ set :shared_paths, [
   'public/uploads',
   'public/shares',
   'log',
-  'db'
+  'db/production.sqlite3'
 ]
 
 task :environment do
