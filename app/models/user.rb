@@ -9,7 +9,9 @@ class User < ActiveRecord::Base
     def locate_email(auth)
       email = extract_email(auth)
       return nil unless email.present?
-      User.find_by( email: email )
+      User.find_by( email: email ).tap do |user|
+        user.try :update, name: auth[:info][:nickname]
+      end
     end
 
     def create_user(auth)
