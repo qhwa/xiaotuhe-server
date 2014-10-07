@@ -31,7 +31,7 @@ set :shared_paths, [
 ]
 
 task :environment do
-  invoke :'rvm:use[ruby-2.1.1@default]'
+  invoke :'rvm:use[ruby-2.1.3@default]'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
@@ -72,7 +72,7 @@ end
 
 task :start => :environment do
   queue "cd #{deploy_to}/current"
-  queue "unicorn_rails --daemonize --env #{rails_env} --config-file #{unicorn_config}"
+  queue "bundle exec unicorn_rails --daemonize --env #{rails_env} --config-file #{unicorn_config}"
 end
 
 task :stop => :environment do
