@@ -24,7 +24,7 @@ module SharesHelper
 
 
   def link_to_delete_share share
-    link_to '删除', share_path(share, format: :js),
+    link_to '删除', share_path(share),
       remote: true,
       method: 'DELETE',
       data: {

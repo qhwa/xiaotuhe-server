@@ -1,7 +1,7 @@
 XthHost::Application.routes.draw do
 
   root 'welcome#index'
-  resources :shares, defaults: { format: :json } do
+  resources :shares do
     member do
       post 'append', constraints: { id: /\w+/ }
       put 'renew'

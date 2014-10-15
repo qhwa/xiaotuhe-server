@@ -4,7 +4,7 @@
     span.time= share.created_at.to_formatted_s(:long)
   td 已过期
   td.action
-    = link_to '延长', renew_share_path(share, format: :js), remote: true, method: 'PUT'
+    = link_to '延长', renew_share_path(share), remote: true, method: 'PUT'
     = link_to_delete_share(share)
 
 - else
