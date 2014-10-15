@@ -4,6 +4,7 @@ XthHost::Application.routes.draw do
   resources :shares, defaults: { format: :json } do
     member do
       post 'append', constraints: { id: /\w+/ }
+      put 'renew'
 
       scope :unzip do
 

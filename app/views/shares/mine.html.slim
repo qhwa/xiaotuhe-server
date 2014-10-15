@@ -10,19 +10,7 @@
     tbody
       - @shares.each do |share|
         tr id="share-#{share.to_param}"
-          - if share.expired?
-            td= share.original_name
-            td= share.created_at.to_formatted_s(:long)
-            td 已过期
-            td
-              /= link_to '延长', renew_share_path(share), remote: true, method: 'PUT'
-              = link_to '删除', share_path(share, format: :js), remote: true, method: 'DELETE'
-
-          - else
-            td= link_to share.original_name, share_path(share, format: :html)
-            td= share.created_at.to_formatted_s(:long)
-            td= share.expires_at.to_formatted_s(:long)
-            td= link_to '删除', share_path(share, format: :js), remote: true, method: 'DELETE'
+          = render partial: 'share_item', locals: { share: share }
 
   = paginate @shares
 

@@ -1,0 +1,16 @@
+- if share.expired?
+  td.name= share.original_name
+  td
+    span.time= share.created_at.to_formatted_s(:long)
+  td 已过期
+  td.action
+    = link_to '延长', renew_share_path(share, format: :js), remote: true, method: 'PUT'
+    = link_to_delete_share(share)
+
+- else
+  td= link_to share.original_name, share_path(share, format: :html)
+  td
+    span.time= share.created_at.to_formatted_s(:long)
+  td
+    span.time= share.expires_at.to_formatted_s(:long)
+  td= link_to_delete_share(share)

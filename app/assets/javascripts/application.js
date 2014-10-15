@@ -19,6 +19,9 @@
 //= require jquery.tablesort
 //= require welcome
 //= require dropdown
+//= require moment
+//= require moment.lang.zh_cn
+//= require shares
 //= require_self
 
 "use strict"
@@ -34,4 +37,14 @@ $.ajaxSetup({
 
 $(function($){
   $('.ui.dropdown').dropdown();
+  $('.time').fromNow();
 });
+
+$.fn.fromNow = function(){
+  return $(this).each(function(){
+    var timeKey = 'raw-time';
+    var $this = $(this), txt = $this.data(timeKey) || $this.text();
+    $this.data(timeKey, txt)
+    $this.text(moment(txt).fromNow());
+  });
+};

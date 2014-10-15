@@ -22,4 +22,14 @@ module SharesHelper
     number_to_human_size @share.entry_size( path )
   end
 
+
+  def link_to_delete_share share
+    link_to '删除', share_path(share, format: :js),
+      remote: true,
+      method: 'DELETE',
+      data: {
+        confirm: "确定要删除「#{share.original_name}」吗？"
+      }
+  end
+
 end

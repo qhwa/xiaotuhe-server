@@ -1,6 +1,6 @@
 class SharesController < ApplicationController
 
-  before_action :find_share, only: [:show, :append, :show_content, :destroy]
+  before_action :find_share, only: [:show, :append, :show_content, :destroy, :renew]
   before_action :require_user, only: [:mine]
 
   # GET /mine.html
@@ -44,6 +44,12 @@ class SharesController < ApplicationController
     @share.destroy
   end
 
+
+  # PUT /shares/:key/renew
+  def renew
+    @share.update expires_at: 1.day.since
+  end
+
   private
 
     def app_params
@@ -51,7 +57,7 @@ class SharesController < ApplicationController
     end
 
     def find_share
-      @share = Share.find_by key: params[:id]
+      @share = Share.find_by(key: params[:id]) or fail ActiveRecord::RecordNotFound
     end
 
     def can_attach_share? share
