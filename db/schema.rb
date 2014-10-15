@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141006080642) do
+ActiveRecord::Schema.define(version: 20141015134042) do
 
   create_table "shares", force: true do |t|
     t.string   "file"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20141006080642) do
     t.datetime "updated_at"
     t.string   "original_name"
     t.integer  "user_id"
+    t.datetime "expires_at"
   end
 
   add_index "shares", ["content_type"], name: "index_shares_on_content_type"

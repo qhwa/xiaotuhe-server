@@ -1,6 +1,6 @@
 class SharesController < ApplicationController
 
-  before_action :find_share, only: [:show, :append, :show_content]
+  before_action :find_share, only: [:show, :append, :show_content, :destroy]
   before_action :require_user, only: [:mine]
 
   # GET /mine.html
@@ -11,6 +11,7 @@ class SharesController < ApplicationController
   def create
     @share = Share.new app_params
     @share.user = current_user if current_user.present?
+    @share.expires_at = 1.day.since
     if @share.save
       @attached = current_user.present?
       session[:ghost_share_id] = @share.id unless @attached
@@ -21,6 +22,7 @@ class SharesController < ApplicationController
   end
 
   def show
+    render 'expired' if @share.expired?
   end
 
   def append
@@ -36,6 +38,10 @@ class SharesController < ApplicationController
     if @share.unzipped?
       @entries = @share / @path
     end
+  end
+
+  def destroy
+    @share.destroy
   end
 
   private

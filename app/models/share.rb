@@ -14,6 +14,9 @@ class Share < ActiveRecord::Base
   validates :key, presence: true, uniqueness: true
   before_validation :gen_key
 
+  scope :expired, -> { where(["expires_at <= ?", DateTime.now]) }
+  scope :working, -> { where(["expires_at >  ?", DateTime.now]) }
+
   def to_param
     key
   end
@@ -80,6 +83,14 @@ class Share < ActiveRecord::Base
 
   def folder? path
     File.directory?( full_path(path) )
+  end
+
+  def expired?
+    !working?
+  end
+
+  def working?
+    expires_at && expires_at > DateTime.now
   end
 
   private
