@@ -8,7 +8,7 @@
     = link_to_delete_share(share)
 
 - else
-  td= link_to share.original_name, share_path(share, format: :html)
+  td= link_to share.original_name, share_path(share)
   td
     span.time= share.created_at.to_formatted_s(:long)
   td
