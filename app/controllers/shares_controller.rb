@@ -10,8 +10,13 @@ class SharesController < ApplicationController
 
   def create
     @share = Share.new app_params
-    @share.user = current_user if current_user.present?
-    @share.expires_at = 1.day.since
+    if current_user.present?
+      @share.user = current_user
+      @share.expires_at = 1.week.since
+    else
+      @share.expires_at = 1.day.since
+    end
+
     if @share.save
       @attached = current_user.present?
       session[:ghost_share_id] = @share.id unless @attached
