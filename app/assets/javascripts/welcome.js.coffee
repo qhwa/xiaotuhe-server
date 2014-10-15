@@ -63,7 +63,7 @@ class @WelcomeCtrl
         $scope.$apply =>
           $scope.state      = 'success'
           $scope.elapsed    = ((new Date) - @startTime)/1000.0
-          $scope.view_url   = "#{location.origin}/shares/#{@key}.html"
+          $scope.view_url   = "#{location.origin}/shares/#{@key}"
           $scope.count_down = 5
           @countDown()
 
