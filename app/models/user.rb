@@ -41,4 +41,8 @@ class User < ActiveRecord::Base
 
   has_many :shares, -> { order 'updated_at DESC' }, dependent: :destroy
 
+  def can_renew? share
+    share.user_id == id
+  end
+
 end

@@ -1,2 +1,7 @@
 .ui.red.message
-  h4 该分享已过期
+  h4
+    | 该分享已过期
+    - if current_user.try(:can_renew?, @share)
+      | ，
+      = link_to '重新启用', renew_share_path(@share), remote: true, method: 'PUT'
+
